@@ -70,6 +70,14 @@ namespace Demo.Models
 
     }
 
+    void Take(string item)
+    {
+      // TODO need to add items into rooms to be added to player inventory, loot for battles too?
+    }
+    void Use(string item)
+    {
+      // TODO need to implement an inventory and once having items inside procede to use them :P
+    }
     private void HandlePlayerInput()
     {
       var playerInput = Console.ReadLine();
@@ -87,6 +95,12 @@ namespace Demo.Models
       {
         case "go":
           Go(option);
+          break;
+        case "take":
+          Take(option);
+          break;
+        case "use":
+          Use(option);
           break;
         case "restart":
           Setup();
@@ -118,12 +132,13 @@ namespace Demo.Models
     private void Help()
     {
       System.Console.WriteLine(@"
+'look'- Looks to see if there is anything of worth in the room.
 'go'- paired with a direction will try to leave the room through that door if possible.
 'use'- paired with an item in your inventory to use, if a weapon use will equipt it.
-'take'- paired with takeable items that are in the room to add them to your inventory,
-'inventory'- displays items in your inventory
-'quit'- exits the application, WARNING: PROGRESS DOES NOT SAVE
-'restart'- resets the game to the beginning
+'take'- paired with takeable items that are in the room to add them to your inventory.
+'inventory'- displays items in your inventory.
+'quit'- exits the application, WARNING: PROGRESS DOES NOT SAVE.
+'restart'- resets the game.
       ");
     }
   }
