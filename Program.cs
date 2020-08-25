@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Demo.Models;
 
 namespace Demo
 {
@@ -7,7 +8,8 @@ namespace Demo
     {
         static void Main(string[] args)
         {
-            
+            new Game();
+            Console.WriteLine("Thank you for playing");
             Console.ReadLine();
         }
     }

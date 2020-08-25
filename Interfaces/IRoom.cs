@@ -10,7 +10,7 @@ namespace Demo.Interfaces
 
     Dictionary<string, IRoom> Exits { get; }
 
-     void OnPlayerEnter();
+    void OnPlayerEnter(IPlayer player);
 
   }
 

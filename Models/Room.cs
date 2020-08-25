@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Demo.Interfaces;
 
@@ -13,20 +14,15 @@ namespace Demo.Models
 
     public virtual void OnPlayerEnter(IPlayer player)
     {
-      System.Console.WriteLine(Name);
-      System.Console.WriteLine(Description);
+      Console.WriteLine("YOU ENTER.....");
     }
 
-  }
-
-  class TrapRoom : Room
-  {
-    public override void OnPlayerEnter(IPlayer player)
+    public Room(string name, string description)
     {
-      base.OnPlayerEnter(player);
-      player.TakeDamage(500);
-
+      Name = name;
+      Description = description;
     }
+
   }
 
 }
