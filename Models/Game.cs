@@ -18,8 +18,17 @@ namespace Demo.Models
 
       var room2 = new Room("North Room", "its bland but there is a grotesque goblin staring at you");
       var poisonTrapRoom = new TrapRoom("Poison Room", "smells bad", 300);
+      var room3 = new Room("West of starting room", "It is a dimly lit room with a fire in the corner, sitting by the fire is kobold with its back to you there appears to be dried blood on the ground and a torn tapestry to the south");
+      var secretRoom = new Room("secret Room", "It appears to be an old storeroom poorly hidden. inside is a stool, utop that stool is a unlabled flask. and beside is a dagger engraved with uninteligable script");
       DeathRoom = poisonTrapRoom;
+      var bossRoom = new Room("Boss Room", "As you approach the door you get chills down your spine, maybe you should have thought more about this decision. Once inside you see a large Orc with a battleaxe waiting for you.");
       room1.Exits.Add("north", room2);
+      room1.Exits.Add("south", poisonTrapRoom);
+      room1.Exits.Add("west", room3);
+      room1.Exits.Add("east", bossRoom);
+      room3.Exits.Add("south", secretRoom);
+      room3.Exits.Add("east", room1);
+      secretRoom.Exits.Add("north", room3);
       room2.Exits.Add("south", room1);
 
       CurrentRoom = room1;
@@ -30,13 +39,13 @@ namespace Demo.Models
     {
       // Get Player Info
       CurrentPlayer = new Player();
-
+      Help();
       Play();
     }
 
     void Play()
     {
-      while (!CurrentPlayer.Dead)
+      while (Playing)
       {
         System.Console.WriteLine(CurrentRoom.Name);
         System.Console.WriteLine(CurrentRoom.Description);
@@ -52,12 +61,13 @@ namespace Demo.Models
       if (CurrentRoom.Exits.ContainsKey(direction))
       {
         CurrentRoom = CurrentRoom.Exits[direction];
+        CurrentRoom.OnPlayerEnter(CurrentPlayer);
       }
       else
       {
-        CurrentRoom = DeathRoom;
+        System.Console.WriteLine("Invalid Direction!");
       }
-      CurrentRoom.OnPlayerEnter(CurrentPlayer);
+
     }
 
     private void HandlePlayerInput()
@@ -70,7 +80,7 @@ namespace Demo.Models
         return;
       }
 
-      var command = playerInput.Split(" ") [0];
+      var command = playerInput.Split(" ")[0];
       var option = playerInput.Substring(playerInput.IndexOf(" ") + 1);
 
       switch (command)
@@ -82,10 +92,11 @@ namespace Demo.Models
           Setup();
           break;
         case "help":
-          // Help(); print all the comands
-          Console.WriteLine("Bah no help here");
+          Help();
+
           break;
         case "q":
+        case "quit":
           Playing = false;
           break;
       }
@@ -103,6 +114,17 @@ namespace Demo.Models
     \|__|    \|__|\|_______|\|__|\|__|    \|__|        \|_______|\|_______|\|_______|\|_______|
       ");
       Setup();
+    }
+    private void Help()
+    {
+      System.Console.WriteLine(@"
+'go'- paired with a direction will try to leave the room through that door if possible.
+'use'- paired with an item in your inventory to use, if a weapon use will equipt it.
+'take'- paired with takeable items that are in the room to add them to your inventory,
+'inventory'- displays items in your inventory
+'quit'- exits the application, WARNING: PROGRESS DOES NOT SAVE
+'restart'- resets the game to the beginning
+      ");
     }
   }
 

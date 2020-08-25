@@ -14,7 +14,7 @@ namespace Demo.Models
 
     public virtual void OnPlayerEnter(IPlayer player)
     {
-      Console.WriteLine("YOU ENTER.....");
+      Console.WriteLine($"You enter {Name}");
     }
 
     public Room(string name, string description)
