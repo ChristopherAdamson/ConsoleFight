@@ -31,6 +31,11 @@ namespace Demo.Models
     public void TakeDamage(int amount)
     {
       Health -= amount;
+      System.Console.WriteLine($"You delt {amount} damage to {Name}");
+      // if(Health <= 0)
+      // {
+      //   Dead = true
+      // }
     }
     public Enemy(string name, int health)
     {

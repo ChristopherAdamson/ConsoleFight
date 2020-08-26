@@ -8,6 +8,7 @@ namespace Demo.Models
     private bool Playing { get; set; } = true;
     private Room CurrentRoom { get; set; }
     private Player CurrentPlayer { get; set; }
+    public bool Fighting { get; set; }
 
     void Setup()
     {
@@ -57,10 +58,15 @@ namespace Demo.Models
 
     void Play()
     {
+      CurrentRoom.OnPlayerEnter(CurrentPlayer);
       while (Playing)
       {
-        System.Console.WriteLine(CurrentRoom.Name);
-        System.Console.WriteLine(CurrentRoom.Description);
+        if (CurrentRoom.Enemy != null)
+        {
+          System.Console.WriteLine($"{CurrentRoom.Enemy.Name} attacks you!");
+          Fighting = true;
+          Combat(CurrentPlayer, CurrentRoom.Enemy);
+        }
 
         Console.WriteLine("What would you like to do?");
         HandlePlayerInput();
@@ -165,6 +171,61 @@ namespace Demo.Models
           break;
       }
     }
+    private void Combat(IPlayer player, IEnemy enemy)
+    {
+
+      while (Fighting)
+      {
+
+        System.Console.WriteLine(enemy.Health);
+        System.Console.WriteLine(enemy.Dead);
+        System.Console.WriteLine("Options: 1. Attack 2. Use Items. 3. Check Inventory");
+        handleCombatInput(player, enemy);
+        enemy.DealDamage(player);
+        if (enemy.Health <= 0)
+        {
+          Fighting = false;
+        }
+
+      }
+      System.Console.WriteLine($"You killed {enemy.Name}!");
+      if (enemy.Loot != null)
+      {
+        enemy.Loot.ForEach(item => CurrentRoom.Content.Add(item));
+      }
+    }
+
+    private void handleCombatInput(IPlayer player, IEnemy enemy)
+    {
+      var playerInput = Console.ReadLine().ToLower();
+
+      if (playerInput == null)
+      {
+        handleCombatInput(player, enemy);
+        return;
+      }
+
+      var command = playerInput.Split(" ")[0];
+      var option = playerInput.Substring(playerInput.IndexOf(" ") + 1);
+
+      switch (command)
+      {
+        case "1":
+        case "attack":
+          if (player.Weapon != null)
+          {
+            enemy.TakeDamage(player.Weapon.Damage);
+            break;
+          }
+          else
+          {
+            System.Console.WriteLine("Your fists dont seem to have much effect");
+            break;
+          }
+
+      }
+    }
+
 
     public Game()
     {

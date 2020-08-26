@@ -18,7 +18,16 @@ namespace Demo.Models
 
     public void DealDamage(IEnemy player)
     {
-      player.TakeDamage(Weapon.Damage);
+      if (Weapon != null)
+      {
+        player.TakeDamage(Weapon.Damage);
+        System.Console.WriteLine($"You delt {Weapon.Damage} damage to {player.Name}");
+      }
+      else
+      {
+        System.Console.WriteLine("Your fists dont seem to have much effect");
+      }
+
     }
 
     public void EquipWeapon(IWeapon weapon)
@@ -30,6 +39,7 @@ namespace Demo.Models
     public void TakeDamage(int amount)
     {
       Health -= amount;
+      System.Console.WriteLine($"You took {amount} damage!");
     }
 
     public Player()
