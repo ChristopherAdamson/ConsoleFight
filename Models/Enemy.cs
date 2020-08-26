@@ -4,9 +4,9 @@ using Demo.Interfaces;
 
 namespace Demo.Models
 {
-  class Player : IPlayer
+  public class Enemy : IEnemy
   {
-    public List<IItem> Inventory { get; set; }
+    public List<IItem> Loot => new List<IItem>();
 
     public string Name { get; set; }
 
@@ -14,29 +14,29 @@ namespace Demo.Models
 
     public bool Dead { get => Health <= 0; }
 
-    public IWeapon Weapon { get; set; }
+    public IWeapon Weapon { get; private set; }
 
-    public void DealDamage(IEnemy player)
+
+    public void DealDamage(IPlayer player)
     {
-      throw new NotImplementedException();
+      player.TakeDamage(Weapon.Damage);
     }
 
     public void EquipWeapon(IWeapon weapon)
     {
-      throw new NotImplementedException();
+      Weapon = weapon;
+      Loot.Add(Weapon);
     }
 
     public void TakeDamage(int amount)
     {
       Health -= amount;
     }
-
-    public Player()
+    public Enemy(string name, int health)
     {
-      Console.WriteLine("Hey Listen..... What is your name?");
-      Name = Console.ReadLine();
-      Health = 100;
+      Name = name;
+      Health = health;
     }
-
   }
+
 }

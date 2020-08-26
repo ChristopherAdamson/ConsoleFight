@@ -16,10 +16,6 @@ namespace Demo.Models
     public virtual void OnPlayerEnter(IPlayer player)
     {
       Console.WriteLine($"You enter {Name}");
-      if (Name == "room1")
-      {
-
-      }
     }
 
     public Room(string name, string description)

@@ -13,10 +13,21 @@ namespace Demo.Models
     void Setup()
     {
       // Do the things like create enemies and rooms and assign items to enemies
+      Weapon Dagger = new Weapon("Dull dagger", 15);
+      Weapon Sword = new Weapon("Old Sword", 25);
+      Weapon Battleaxe = new Weapon("Rusted Battleaxe", 30);
+      Enemy Goblin = new Enemy("Gleb", 50);
+      Enemy Kobold = new Enemy("Gromp", 75);
+      Goblin.EquipWeapon(Dagger);
+      Kobold.EquipWeapon(Dagger);
+      Enemy Orc = new Enemy("Grawl", 75);
+      Orc.EquipWeapon(Battleaxe);
+
 
       var room1 = new Room("The Starting Room", "You awake to the sound of violence coming from the north, west to the south it is suspiciously quiet, An acrid smell permeates from the south.");
-
+      room1.Content.Add(Sword);
       var room2 = new Room("North Room", "its bland but there is a grotesque goblin staring at you");
+      room2.Enemy = Goblin;
       var poisonTrapRoom = new TrapRoom("Poison Room", "smells bad", 300);
       var room3 = new Room("West of starting room", "It is a dimly lit room with a fire in the corner, sitting by the fire is kobold with its back to you there appears to be dried blood on the ground and a torn tapestry to the south");
       var secretRoom = new Room("secret Room", "It appears to be an old storeroom poorly hidden. inside is a stool, utop that stool is a unlabled flask. and beside is a dagger engraved with uninteligable script");
@@ -69,10 +80,18 @@ namespace Demo.Models
       }
 
     }
-
-    void Take(string item)
+    void Look(Room CurrentRoom)
     {
       // TODO need to add items into rooms to be added to player inventory, loot for battles too?
+      for (int i = 0; i < CurrentRoom.Content.Count; i++)
+      {
+        System.Console.WriteLine(CurrentRoom.Content[i]);
+      }
+    }
+    void Take(Room CurrentRoom, IItem item)
+    {
+      // TODO need to add items into rooms to be added to player inventory, loot for battles too?
+      CurrentRoom.Content.Find(item);
     }
     void Use(string item)
     {
@@ -97,7 +116,7 @@ namespace Demo.Models
           Go(option);
           break;
         case "take":
-          Take(option);
+          Take(CurrentRoom, option);
           break;
         case "use":
           Use(option);
