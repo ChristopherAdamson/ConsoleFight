@@ -87,29 +87,38 @@ namespace Demo.Models
       // TODO need to add items into rooms to be added to player inventory, loot for battles too?
       if (CurrentRoom.Content.Count > 0)
       {
-        for (int i = 0; i <= CurrentRoom.Content.Count; i++)
+        for (int i = 0; i < CurrentRoom.Content.Count; i++)
         {
-          System.Console.WriteLine(CurrentRoom.Content[i]);
+          System.Console.WriteLine(CurrentRoom.Content[i].Name);
         }
       }
-      // else
-      // {
-      //   System.Console.WriteLine("nothing.");
+      else
+      {
+        System.Console.WriteLine("nothing.");
 
-      // }
+      }
     }
     void Take(string itemName)
     {
 
       // TODO need to add items into rooms to be added to player inventory, loot for battles too?
-      IItem foundItem = CurrentRoom.Content.Find(item => item.Name == itemName);
-      CurrentRoom.Content.Remove(foundItem);
-      CurrentPlayer.Inventory.Add(foundItem);
+      IItem foundItem = CurrentRoom.Content.Find(item => item.Name.ToLower() == itemName);
+      if (foundItem != null)
+      {
+        CurrentRoom.Content.Remove(foundItem);
+        CurrentPlayer.Inventory.Add(foundItem);
+        System.Console.WriteLine($"You Put the {foundItem.Name} in your inventory");
+      }
+      else
+      {
+        System.Console.WriteLine("You couldnt find that item to take");
+      }
+
     }
     void Use(string itemName)
     {
       // TODO need to implement an inventory and once having items inside procede to use them :P
-      IItem foundItem = CurrentPlayer.Inventory.Find(item => item.Name == itemName);
+      IItem foundItem = CurrentPlayer.Inventory.Find(item => item.Name.ToLower() == itemName);
       if (foundItem is Weapon)
       {
         CurrentPlayer.EquipWeapon((Weapon)foundItem);
@@ -118,7 +127,7 @@ namespace Demo.Models
     }
     private void HandlePlayerInput()
     {
-      var playerInput = Console.ReadLine();
+      var playerInput = Console.ReadLine().ToLower();
 
       if (playerInput == null)
       {

@@ -24,6 +24,7 @@ namespace Demo.Models
     public void EquipWeapon(IWeapon weapon)
     {
       Weapon = weapon;
+      System.Console.WriteLine($"You Equipped {Weapon.Name}");
     }
 
     public void TakeDamage(int amount)
