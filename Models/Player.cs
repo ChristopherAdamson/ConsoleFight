@@ -6,7 +6,7 @@ namespace Demo.Models
 {
   class Player : IPlayer
   {
-    public List<IItem> Inventory { get; set; }
+    public List<IItem> Inventory { get; set; } = new List<IItem>();
 
     public string Name { get; set; }
 
@@ -18,12 +18,12 @@ namespace Demo.Models
 
     public void DealDamage(IEnemy player)
     {
-      throw new NotImplementedException();
+      player.TakeDamage(Weapon.Damage);
     }
 
     public void EquipWeapon(IWeapon weapon)
     {
-      throw new NotImplementedException();
+      Weapon = weapon;
     }
 
     public void TakeDamage(int amount)
@@ -35,7 +35,7 @@ namespace Demo.Models
     {
       Console.WriteLine("Hey Listen..... What is your name?");
       Name = Console.ReadLine();
-      Health = 100;
+      Health = 150;
     }
 
   }

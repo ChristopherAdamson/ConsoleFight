@@ -6,14 +6,14 @@ namespace Demo.Models
   public class Game
   {
     private bool Playing { get; set; } = true;
-    private IRoom DeathRoom { get; set; }
-    private IRoom CurrentRoom { get; set; }
+    private Room CurrentRoom { get; set; }
     private Player CurrentPlayer { get; set; }
 
     void Setup()
     {
       // Do the things like create enemies and rooms and assign items to enemies
       Weapon Dagger = new Weapon("Dull dagger", 15);
+      Weapon EnchantedDagger = new Weapon("Enchanted Dagger", 50);
       Weapon Sword = new Weapon("Old Sword", 25);
       Weapon Battleaxe = new Weapon("Rusted Battleaxe", 30);
       Enemy Goblin = new Enemy("Gleb", 50);
@@ -31,7 +31,8 @@ namespace Demo.Models
       var poisonTrapRoom = new TrapRoom("Poison Room", "smells bad", 300);
       var room3 = new Room("West of starting room", "It is a dimly lit room with a fire in the corner, sitting by the fire is kobold with its back to you there appears to be dried blood on the ground and a torn tapestry to the south");
       var secretRoom = new Room("secret Room", "It appears to be an old storeroom poorly hidden. inside is a stool, utop that stool is a unlabled flask. and beside is a dagger engraved with uninteligable script");
-      DeathRoom = poisonTrapRoom;
+      secretRoom.Content.Add(EnchantedDagger);
+      // secretRoom.Content.Add(Potion)
       var bossRoom = new Room("Boss Room", "As you approach the door you get chills down your spine, maybe you should have thought more about this decision. Once inside you see a large Orc with a battleaxe waiting for you.");
       room1.Exits.Add("north", room2);
       room1.Exits.Add("south", poisonTrapRoom);
@@ -71,7 +72,7 @@ namespace Demo.Models
     {
       if (CurrentRoom.Exits.ContainsKey(direction))
       {
-        CurrentRoom = CurrentRoom.Exits[direction];
+        CurrentRoom = (Room)CurrentRoom.Exits[direction];
         CurrentRoom.OnPlayerEnter(CurrentPlayer);
       }
       else
@@ -82,20 +83,38 @@ namespace Demo.Models
     }
     void Look(Room CurrentRoom)
     {
+      System.Console.WriteLine("You find...");
       // TODO need to add items into rooms to be added to player inventory, loot for battles too?
-      for (int i = 0; i < CurrentRoom.Content.Count; i++)
+      if (CurrentRoom.Content.Count > 0)
       {
-        System.Console.WriteLine(CurrentRoom.Content[i]);
+        for (int i = 0; i <= CurrentRoom.Content.Count; i++)
+        {
+          System.Console.WriteLine(CurrentRoom.Content[i]);
+        }
       }
+      // else
+      // {
+      //   System.Console.WriteLine("nothing.");
+
+      // }
     }
-    void Take(Room CurrentRoom, IItem item)
+    void Take(string itemName)
     {
+
       // TODO need to add items into rooms to be added to player inventory, loot for battles too?
-      CurrentRoom.Content.Find(item);
+      IItem foundItem = CurrentRoom.Content.Find(item => item.Name == itemName);
+      CurrentRoom.Content.Remove(foundItem);
+      CurrentPlayer.Inventory.Add(foundItem);
     }
-    void Use(string item)
+    void Use(string itemName)
     {
       // TODO need to implement an inventory and once having items inside procede to use them :P
+      IItem foundItem = CurrentPlayer.Inventory.Find(item => item.Name == itemName);
+      if (foundItem is Weapon)
+      {
+        CurrentPlayer.EquipWeapon((Weapon)foundItem);
+      }
+      CurrentPlayer.Inventory.Remove(foundItem);
     }
     private void HandlePlayerInput()
     {
@@ -115,8 +134,11 @@ namespace Demo.Models
         case "go":
           Go(option);
           break;
+        case "look":
+          Look(CurrentRoom);
+          break;
         case "take":
-          Take(CurrentRoom, option);
+          Take(option);
           break;
         case "use":
           Use(option);

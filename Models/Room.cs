@@ -9,7 +9,7 @@ namespace Demo.Models
     public string Name { get; set; }
     public string Description { get; set; }
 
-    public List<IItem> Content { get; set; }
+    public List<IItem> Content { get; set; } = new List<IItem>();
     public IEnemy Enemy { get; set; }
     public Dictionary<string, IRoom> Exits { get; } = new Dictionary<string, IRoom>();
 
